@@ -5,34 +5,34 @@ export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
   constructor() {
+    if (!process.env.S3_REGION || !process.env.S3_BUCKET_NAME) {
+      throw new HttpError(
+        "Missing 'S3_REGION' or 'S3_BUCKET_NAME' env variables",
+        500,
+      );
+    }
+
     if (
-      !process.env.SOURCE_API_URL ||
-      !process.env.AUTH_TOKEN_API_URL ||
-      !process.env.SOURCE_DELIVERY_API_BRANCH
+      !process.env.DB_USER ||
+      !process.env.DB_HOST ||
+      !process.env.DB_NAME ||
+      !process.env.DB_PASSWORD ||
+      !process.env.DB_PORT
     ) {
       throw new HttpError(
-        "Missing 'SOURCE_API_URL' or 'SOURCE_DELIVERY_API_BRANCH' or 'AUTH_TOKEN_API_URL' env variables",
+        "Missing 'DB_USER', 'DB_HOST', 'DB_NAME', 'DB_PASSWORD' or 'DB_PORT' env variables",
         500,
       );
-    }
-
-    if (!process.env.AUTH_CLIENTID || !process.env.AUTH_CLIENTSECRET) {
-      throw new HttpError(
-        "Missing 'AUTH_CLIENTID' or 'AUTH_CLIENTSECRET' env variables",
-        500,
-      );
-    }
-
-    if (!process.env.DYNAMO_PICKUP_SOURCE) {
-      throw new HttpError("Missing 'DYNAMO_PICKUP_SOURCE' env variables", 500);
     }
 
     this.envConfig = {
-      SOURCE_API_URL: process.env.SOURCE_API_URL,
-      AUTH_TOKEN_API_URL: process.env.AUTH_TOKEN_API_URL,
-      AUTH_CLIENT_ID: process.env.AUTH_CLIENTID,
-      AUTH_CLIENT_SECRET: process.env.AUTH_CLIENTSECRET,
-      SOURCE_DELIVERY_API_BRANCH: process.env.SOURCE_DELIVERY_API_BRANCH,
+      S3_REGION: process.env.S3_REGION,
+      S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+      DB_USER: process.env.DB_USER,
+      DB_HOST: process.env.DB_HOST,
+      DB_NAME: process.env.DB_NAME,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+      DB_PORT: process.env.DB_PORT,
     };
   }
 
