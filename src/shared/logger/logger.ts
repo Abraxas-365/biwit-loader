@@ -1,10 +1,8 @@
 export class Logger {
-  private log(level: string, message: string, error: any, event: any) {
+  private log(level: string, message: string, error: any) {
     console.log(
       JSON.stringify({
         timestamp: new Date().toISOString(),
-        system: event.headers["X-System"],
-        trackId: event.headers["X-TrackId"],
         level: level,
         message: message,
         error: error,
@@ -12,19 +10,19 @@ export class Logger {
     );
   }
 
-  info(message: string, event: any, error?: any) {
-    this.log("info", message, error, event);
+  info(message: string, error?: any) {
+    this.log("info", message, error);
   }
 
-  warn(message: string, event: any, error?: any) {
-    this.log("warn", message, error, event);
+  warn(message: string, error?: any) {
+    this.log("warn", message, error);
   }
 
-  error(message: string, event: any, error?: any) {
-    this.log("error", message, error, event);
+  error(message: string, error?: any) {
+    this.log("error", message, error);
   }
 
-  debug(message: string, event: any, error?: any) {
-    this.log("debug", message, error, event);
+  debug(message: string, error?: any) {
+    this.log("debug", message, error);
   }
 }
