@@ -6,8 +6,10 @@ import { configService } from "../../../shared";
 export class S3TextParser implements TextParcer {
   private s3Client: S3Client;
 
-  constructor(s3Client: S3Client) {
-    this.s3Client = s3Client;
+  constructor() {
+    this.s3Client = new S3Client({
+      region: configService.get("S3_REGION"),
+    });
   }
 
   async extract_text(filePath: string): Promise<string> {

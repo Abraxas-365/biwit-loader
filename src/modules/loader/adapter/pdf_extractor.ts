@@ -9,8 +9,10 @@ import { configService } from "../../../shared";
 export class PdfTextParser implements TextParcer {
   private textractClient: TextractClient;
 
-  constructor(textractClient: TextractClient) {
-    this.textractClient = textractClient;
+  constructor() {
+    this.textractClient = new TextractClient({
+      region: configService.get("S3_REGION"),
+    });
   }
 
   async extract_text(filePath: string): Promise<string> {
