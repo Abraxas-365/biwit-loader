@@ -3,8 +3,8 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
-import Logger from "../logger/logger";
-import { HttpError, isHttpError } from "../errors/httpError";
+import { isHttpError } from "../errors/httpError";
+import { Logger } from "../logger";
 
 export function handlerMiddleware(
   handler: (
