@@ -7,35 +7,44 @@ export class S3TextParser implements TextParcer {
   private s3Client: S3Client;
 
   constructor() {
-    this.s3Client = new S3Client({
-      region: configService.get("S3_REGION"),
-    });
+    this.s3Client = new S3Client();
   }
 
   async extract_text(filePath: string): Promise<string> {
     const bucketName = configService.get("S3_BUCKET_NAME");
     const objectKey = filePath;
 
-    const command = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-    });
+    try {
+      const command = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+      });
 
-    const { Body } = await this.s3Client.send(command);
+      const response = await this.s3Client.send(command);
 
-    return new Promise((resolve, reject) => {
-      let data = "";
+      if (!response.Body) {
+        throw new Error("No data found in S3 response");
+      }
 
-      (Body as Readable)
-        .on("data", (chunk) => {
-          data += chunk;
-        })
-        .on("end", () => {
+      return new Promise((resolve, reject) => {
+        const stream = response.Body as Readable;
+        let data = "";
+
+        stream.on("data", (chunk) => {
+          data += chunk.toString();
+        });
+
+        stream.on("end", () => {
           resolve(data);
-        })
-        .on("error", (err) => {
+        });
+
+        stream.on("error", (err) => {
           reject(err);
         });
-    });
+      });
+    } catch (err) {
+      console.error("Error in S3 operation or stream handling", err);
+      throw err;
+    }
   }
 }

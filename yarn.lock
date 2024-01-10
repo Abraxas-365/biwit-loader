@@ -1856,6 +1856,11 @@ pgpass@1.x:
   dependencies:
     split2 "^4.1.0"
 
+pgvector@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/pgvector/-/pgvector-0.1.7.tgz#0a170c85da8bae79d79cb09c1968d42d021489f5"
+  integrity sha512-hl1/Rvvu8iENi/0x4QcZh6o3bF2GWyyKIEu5GfXIzRhzhbOo7aQmoTPNWedRG1pziif+gOMTKKzHaJorgr8F0A==
+
 postgres-array@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/postgres-array/-/postgres-array-2.0.0.tgz#48f8fce054fbc69671999329b8834b772652d82e"

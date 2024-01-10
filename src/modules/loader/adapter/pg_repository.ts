@@ -17,18 +17,18 @@ export class PostgresRepository implements Repository {
   }
 
   async save(data: Data): Promise<number> {
-    const client = await this.pool.connect();
-
+    const pgvector = require("pgvector/pg");
+    this.pool.on("connect", async function (client: any) {
+      await pgvector.registerType(client);
+    });
     try {
       const insertQuery =
-        "INSERT INTO data (user_id, chunk, embedding) VALUES ($1, $2, $3) RETURNING id";
-      const values = [data.user_id, data.chunk, data.embedding];
-      const res = await client.query(insertQuery, values);
+        "INSERT INTO data (client_id, chunk, embedding) VALUES ($1,$2,$3) RETURNING id";
+      const values = [data.user_id, data.chunk, pgvector.toSql(data.embedding)];
+      const res = await this.pool.query(insertQuery, values);
       return res.rows[0].id;
     } catch (error) {
       throw new Error(`Error saving data: ${error.message}`);
-    } finally {
-      client.release();
     }
   }
 }

@@ -23,11 +23,11 @@ exports.handler = async (event: S3Event) => {
       if (objectKey.endsWith(".pdf")) {
         const pdfParser = new PdfTextParser();
         const service = new Service(pdfParser, repository);
-        service.save_data(filePath, userId);
+        await service.save_data(filePath, userId);
       } else if (objectKey.endsWith(".txt")) {
         const textParser = new S3TextParser();
         const service = new Service(textParser, repository);
-        service.save_data(filePath, userId);
+        await service.save_data(objectKey, userId);
       } else {
         logger.warn(`Unsupported file type: ${filePath}`);
         continue;
