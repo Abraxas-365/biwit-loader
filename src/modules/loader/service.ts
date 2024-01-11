@@ -17,20 +17,14 @@ export class Service {
     this.logger.info(text);
     const splitter = new TokenTextSplitter({
       encodingName: "gpt2",
-      chunkSize: 10,
-      chunkOverlap: 0,
+      chunkSize: 200,
+      chunkOverlap: 50,
     });
 
     const output = await splitter.createDocuments([text]);
     const pageContents = output.map((item) => item.pageContent);
 
     const documentRes = await this.embeddings.embedDocuments(pageContents);
-    console.log(
-      "El tamano de pages=" +
-        pageContents.length +
-        " le de em=" +
-        documentRes.length,
-    );
 
     const data = pageContents.map(
       (content, i) => new Data(user_id, content, documentRes[i]),
